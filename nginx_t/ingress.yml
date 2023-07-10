@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx
+  namespace: ngg
+spec:
+  ingressClassName: "nginx"
+  rules:
+  - host: errorstaff.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ngg
+            port:
+              number: 80

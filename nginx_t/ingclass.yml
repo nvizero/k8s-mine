@@ -1,0 +1,10 @@
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: errorstaff
+spec:
+  controller: "k8s.io/ingress-nginx"
+  parameters:
+    apiGroup: networking.k8s.io
+    kind: Ingress
+    name: errorstaff

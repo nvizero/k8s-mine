@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-cm
+  namespace: php
+data:
+  DATABASE: 'db'
+  USER: 'wp'
+  PASSWORD: '123'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mysql-dep
+  name: mysql-dep
+  namespace: php
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-dep
+  template:
+    metadata:
+      labels:
+        app: mysql-dep
+    spec:
+      containers:
+      - image: mysql:8.0
+        name: mysql
+        ports:
+        - containerPort: 3306
+        env:
+          - name: MYSQL_ALLOW_EMPTY_PASSWORD
+            value: 'false'
+          - name: MYSQL_USER
+            value: 'wp'
+          - name: MYSQL_RANDOM_ROOT_PASSWORD
+            value: 'false'
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              configMapKeyRef: # 從 Secret 取得
+                name: mysql-cm # Secret 名字
+                key: PASSWORD # Secret 裡面的 password 資料
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: mysql-svc
+  name: mysql-svc
+  namespace: php
+spec:
+  ports:
+  - port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    app: mysql-dep

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mak # Name of the deployment
+  namespace: annaler # Name of the namespace
+  labels:
+    app: mak # Name of your application
+spec:
+  selector:
+    matchLabels:
+      app: mak # Name of your application
+  replicas: 1 # Number of replicas
+  template:
+    metadata:
+      labels:
+        app: mak # Name of your application
+    spec:
+      containers:
+      - name: mak # Name of the container
+        image: 19840112/mak:0.0.2 # The image you want to run
+        ports:
+        - containerPort: 3100 # The port that your application uses
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mak
+  namespace: annaler
+spec:
+  selector:
+    app: mak
+  type: ClusterIP 
+  ports:
+  - name:  http
+    port:  80
+    targetPort: 3100

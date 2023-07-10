@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: annaler
+spec:
+  controller: "k8s.io/ingress-nginx"
+  parameters:
+    apiGroup: networking.k8s.io
+    kind: Ingress
+    name: annaler
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: annaler
+  namespace: annaler
+spec:
+  ingressClassName: "annaler"
+  rules:
+  - host: annaler.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: mak
+            port:
+              number: 80

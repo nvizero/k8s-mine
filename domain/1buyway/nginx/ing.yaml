@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: nginx-vs
+spec:
+  hosts:
+    - n1.1buyway.com
+    - n2.1buyway.com
+    - n3.1buyway.com
+  gateways: # 選定的 Ingress Gateway
+    - istio-ingress/my-ingressgateway # istio-ingress Namespace 下的 my-ingressgateway
+  http:
+  - route:
+    - destination:
+        host: nginx-svc # Service 名稱
+        port:
+          number: 80 # Service Port
+

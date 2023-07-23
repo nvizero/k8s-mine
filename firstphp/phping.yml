@@ -1,12 +1,12 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: gr
+  name: php
   namespace: php
 spec:
-  ingressClassName: "gr"
+  ingressClassName: "nginx"
   rules:
-  - host: php.1buyway.com
+  - host: errorstaff.com
     http:
       paths:
       - path: /

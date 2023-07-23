@@ -1,0 +1,14 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-nginx
+spec:
+  entryPoints:
+  - web
+  routes:
+  - match: Host(`nginx.domain.com`)
+    kind: Rule
+    services:
+    - name: nginx-service
+      port: 80

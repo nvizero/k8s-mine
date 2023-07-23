@@ -1,21 +1,21 @@
-apiVersion: networking.k8s.io/v1
-kind: IngressClass
-metadata:
-  name: gr
-spec:
-  controller: "k8s.io/ingress-nginx"
-  parameters:
-    apiGroup: networking.k8s.io
-    kind: Ingress
-    name: gr
+#apiVersion: networking.k8s.io/v1
+#kind: IngressClass
+#metadata:
+#  name: gr
+#spec:
+#  controller: "k8s.io/ingress-nginx"
+#  parameters:
+#    apiGroup: networking.k8s.io
+#    kind: Ingress
+#    name: gr
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: gr
+  name: grafana
   namespace: monitoring
 spec:
-  ingressClassName: "gr"
+  ingressClassName: "nginx"
   rules:
   - host: grafana.1buyway.com
     http:

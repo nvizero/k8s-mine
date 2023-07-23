@@ -6,7 +6,7 @@ metadata:
 data:
   DATABASE: 'db'
   USER: 'wp'
-  PASSWORD: '123'
+  PASSWORD: 'xT+dkaw6I7RBwNv641CQE6xqVjDKwj0a'
 ---
 apiVersion: apps/v1
 kind: Deployment

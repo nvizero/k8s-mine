@@ -1,0 +1,24 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: my-ingressgateway
+  namespace: istio-ingress
+spec:
+  selector:
+    istio: ingressgateway # 選擇
+  servers:
+  - port:
+      number: 80 # 開啟 HTTP Port
+      name: http2
+      protocol: HTTP2
+    hosts:
+    - "*.1buyway.com" # 這些 DNS 進來的都會套用
+  - port:
+      number: 443 # 開啟 HTTPS Port
+      name: https-443
+      protocol: HTTPS
+    hosts:
+    - "*.1buyway.com" # 這些 DNS 進來的都會套用
+    tls:
+      mode: SIMPLE # 使用標準 TLS 連線
+      credentialName: 1buyway-com-cert # 使用的 K8s Secret

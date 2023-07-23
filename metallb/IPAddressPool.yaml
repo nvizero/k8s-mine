@@ -1,0 +1,8 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: first-pool # IP Pool 的名字
+  namespace: metallb-system # Namespace
+spec:
+  addresses:
+  - 192.168.200.200-192.168.200.209 # 打上 IP Range，或者 CIDR 也是可以

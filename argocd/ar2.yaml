@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server-grpc-ingress
+  namespace: argocd
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPCS" #[Note me]
+spec:
+  ingressClassName: internal-nginx #[Change-ME]
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: argocd-server #[your argoCD server service name]
+            port:
+              name: https
+    host: grpc.php.1buyway.com
+  tls:
+  - hosts:
+    - grpc.php.1buyway.com
+    secretName: argocd-tls #["My Let's Encrypt Cert Secrets Name"] #[Change-ME]

@@ -1,0 +1,35 @@
+apiVersion: apps/v1 #版本号, 不同K8s版本api会有区别，确定版本功能所提供的api, kubectl api-resources
+kind: Deployment #类型
+metadata:
+  name: busybox-deployment #元数据名称
+spec: #详细描述
+  selector: #选择器，通过它指定该控制器管理哪些pod
+    matchLabels:
+      app: busybox
+  replicas: 1 #副本
+  strategy: #策略
+    type: RollingUpdate  #滚动更新策略 or Recreate
+  template: #创建pod模版
+    metadata:
+      labels:
+        app: busybox
+    spec:
+      containers:
+      - name: busybox
+        image: busybox
+        command: ["/bin/sh", "-c", "env"]
+        env:
+          - name: ANOTHER_PARAM
+            valueFrom:
+              configMapKeyRef:
+                name: whoami-config
+                key: parameter1
+        volumeMounts:
+          - name: config-volume
+            mountPath: /config     
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: config-volume
+        configMap:
+          name: whoami-config

@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: nginx-virtual-service
+spec:
+  hosts:
+  - "n3.1buyway.com" # 这将匹配所有到Ingress Gateway的HTTP请求
+  gateways:
+  - istio-system/istio-ingressgateway # 指向你的Ingress Gateway
+  http:
+  - route:
+    - destination:
+        host: nginx-svc # 你的服务名
+        port:
+          number: 80 # 你的服务端口号
+

@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  knm-charts:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2023-01-06T10:35:24.524297+08:00"
+    description: A Helm chart for Kubernetes
+    digest: 014d337b4cc0930285836e40ff238b3b9ceea11ad0ea7da0cd19ad97071c42c0
+    name: knm-charts
+    type: application
+    urls:
+    - http://localhost/charts/knm-charts-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-01-06T10:35:24.523266+08:00"

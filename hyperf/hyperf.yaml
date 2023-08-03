@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: hyperf
-        image: finab/bark-server
+        image: 19840112/hyf:0.1
         ports:
         - containerPort: 9501
         volumeMounts:

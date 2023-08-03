@@ -11,7 +11,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /tmp/data/php/james
+    path: /root/.jenkins/workspace/hyperf
   nodeAffinity:
     required:
       nodeSelectorTerms:

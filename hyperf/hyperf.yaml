@@ -18,6 +18,8 @@ spec:
       containers:
       - name: hyperf
         image: 19840112/hyf:0.1
+        command: ["/bin/sh", "-c"]
+        args: ["cd /var/www && composer update && php /var/www/bin/hyperf.php start"]
         ports:
         - containerPort: 9501
         volumeMounts:

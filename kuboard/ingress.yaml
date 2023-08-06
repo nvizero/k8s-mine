@@ -1,18 +1,19 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: wp-ing
-  namespace: wp
+  name: kuboard
+  namespace: kuboard
 spec:
   ingressClassName: "nginx"
   rules:
-  - host: 1buyway.com
+  - host: kuboard.errorstaff.com
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: wp-svc
+            name: kuboard-v3
             port:
               number: 80
+

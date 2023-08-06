@@ -32,5 +32,5 @@ spec:
   type: ClusterIP 
   ports:
   - name:  http
-    port:  80
+    port:  443
     targetPort: 3100

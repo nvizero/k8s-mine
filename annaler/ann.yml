@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: mak # Name of the container
-        image: 19840112/mak:0.0.2 # The image you want to run
+        image: 19840112/mak:latest # The image you want to run
         ports:
         - containerPort: 3100 # The port that your application uses
 ---

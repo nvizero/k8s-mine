@@ -19,9 +19,9 @@ spec:
         ports:
         - containerPort: 5044
         volumeMounts:
-        - mountPath: /usr/share/logstash/data
+        - mountPath: /tmp/logstash
           name: logstash-data
       volumes:
       - name: logstash-data
         persistentVolumeClaim:
-          claimName: logstash-pvc
+          claimName: logstash-pv-claim

@@ -1,0 +1,6 @@
+nfs:
+  server: "85.113.71.222"    # This is the server IP address. Replace it with your own.
+  path: "/mnt/demo"    # Replace the exported directory with your own.
+storageClass:
+  defaultClass: false
+

@@ -1,0 +1,60 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebeat-config
+  namespace: logging
+  labels:
+    type: filebeat 
+data:
+  filebeat.yml: |
+    filebeat.inputs:
+    - type: container
+      enable: true
+      paths:
+        - /var/log/containers/*.log
+      processors:
+        - add_kubernetes_metadata:
+            host: ${NODE_NAME}
+            matchers:
+            - logs_path:
+                logs_path: "/var/log/containers/"
+    output.logstash:
+      hosts: ["logstash:5044"]
+      enabled: true
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata: 
+  name: filebeat
+  namespace: logging
+  labels:
+    k8s-app: filebeat
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata: 
+  name: filebeat
+  labels:
+    k8s-app: filebeat
+rules:
+- apiGroups: [""]
+  resources:
+  - namespaces
+  - pods
+  verbs: ["get","watch","list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata: 
+  name: filebeat
+subjects:
+- kind: ServiceAccount
+  name: filebeat
+  namespace: logging
+roleRef:
+  kind: ClusterRole
+  name: filebeat
+  apiGroups: rbac.authorization.k8s.io
+---

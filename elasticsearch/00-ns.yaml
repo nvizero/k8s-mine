@@ -1,0 +1,9 @@
+# cat 00-ns.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ns-elk
+  labels:
+    app: elasticsearch
+
+# kubectl apply -f 00-ns.yaml

@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-conf
+  namespace: logging
+  labels:
+    type: logstash 
+data:
+  logstash.conf: |
+      input {
+        beats {
+            port => "5044"
+        }
+      }
+      filter{
+        json{
+                source =>  "message"
+                remove_field => "message"
+        }
+      }
+      output {
+        elasticsearch {
+            hosts => "elasticsearch:9200"
+            codec => json
+            index => "logstash-%{+YYYY.MM.dd}"
+        }
+      }
+
+---
+
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-yml
+  namespace: logging
+  labels:
+    type: logstash 
+data:
+  logstash.yml: |-
+    http.host: "0.0.0.0"
+    xpack.monitoring.elasticsearch.hosts: http://elasticsearch:9200
+

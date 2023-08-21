@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv
+  namespace: logging
+spec:
+  capacity:                             # PV的存储容量
+    storage: 5Gi
+  accessModes:                  # PV的访问模式
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-storage
+  nfs:
+    path: /usr/share/elasticsearch/data
+    server: 85.113.71.222
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch
+  namespace: logging
+  labels:
+    app: elasticsearch
+spec:
+  selector:
+    k8s-app: elasticsearch
+  clusterIP: None
+  ports:
+    - port: 9200
+      name: db
+    - port: 9300
+      name: inter
+      
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: elasticsearch
+  namespace: logging
+  labels:
+    k8s-app: elasticsearch
+spec:
+  serviceName: elasticsearch
+  selector:
+    matchLabels:
+      k8s-app: elasticsearch
+  template:
+    metadata:
+      labels:
+        k8s-app: elasticsearch
+    spec:
+      containers:
+      - image: elasticsearch:7.14.0
+        name: elasticsearch
+        resources:
+          limits:
+            cpu: 1
+            memory: 2Gi
+          requests:
+            cpu: 0.5
+            memory: 500Mi
+        env:
+          - name: "discovery.type"
+            value: "single-node"
+          - name: ES_JAVA_OPTS
+            value: "-Xms512m -Xmx2g"
+        ports:
+        - containerPort: 9200
+          name: db
+          protocol: TCP
+        - name: inter
+          containerPort: 9300
+        volumeMounts:
+        - name: elasticsearch-data
+          mountPath: /usr/share/elasticsearch/data
+  volumeClaimTemplates:
+  - metadata:
+      name: elasticsearch-data
+    spec:
+      storageClassName: "nfs-storage"
+      accessModes: [ "ReadWriteMany" ]
+      resources:
+        requests:
+          storage: 5Gi

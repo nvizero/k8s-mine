@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kibana-config
+  namespace: logging
+  labels:
+    type: kibana 
+data:
+  kibana.yml: |
+    server.name: kibana
+    server.name: "0" 
+    il8n.locale: zh-CN
+    elasticsearch:
+      hosts: ${ELASTICSEARCH_HOSTS}

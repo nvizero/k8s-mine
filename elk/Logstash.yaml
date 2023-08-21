@@ -1,4 +1,33 @@
-apiVersion: apps/v1
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-configmap
+  namespace: logging
+  labels:
+    k8s-app: logstash-configmap
+data:
+  logstash.conf: |
+      input {
+        beats {
+            port => "5044"
+            codec => "json"
+        }
+      }
+      filter{
+        json{
+                source =>  "message"
+                remove_field => "message"
+        }
+      }
+      output {
+        elasticsearch {
+            hosts => "elasticsearch:9200"
+            index => "nginx-json-log-%{+YYYY.MM.dd}"
+        }
+      }
+---
+apiVersion: apps/v1 
 kind: Deployment
 metadata:
   name: logstash
@@ -7,21 +36,39 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: logstash
+      k8s-app: logstash
   template:
     metadata:
       labels:
-        app: logstash
+        k8s-app: logstash
     spec:
       containers:
       - name: logstash
-        image: docker.elastic.co/logstash/logstash:7.15.0
+        image: logstash:7.14.0 
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5044
         volumeMounts:
-        - mountPath: /tmp/logstash
-          name: logstash-data
+          - name: config-volume
+            mountPath: /usr/share/logstash/pipeline/
       volumes:
-      - name: logstash-data
-        persistentVolumeClaim:
-          claimName: logstash-pv-claim
+      - name: config-volume
+        configMap:
+          name: logstash-configmap
+          items:
+            - key: logstash.conf
+              path: logstash.conf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: logstash
+  namespace: logging
+spec:
+  ports:
+  - port: 5044
+    targetPort: 5044
+    protocol: TCP
+  selector:
+    k8s-app: logstash
+  type: ClusterIP

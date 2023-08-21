@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: DaemonSet
-metadata: 
-  name: filebeat 
+metadata:
+  name: filebeat
   namespace: logging
   labels:
     k8s-app: filebeat
@@ -14,22 +14,22 @@ spec:
       labels:
         k8s-app: filebeat
     spec:
-      ServiceAccountName: filebeat
+      serviceAccountName: filebeat
       terminationGracePeriodSeconds: 30
       containers:
       - name: filebeat
         image: docker.io/kubeimages/filebeat:7.9.3
-        args: ["-c", "/etc/filebeat.yml","-e","-httprof","0.0.0.0:6060"]
+        args: ["-c", "/etc/filebeat.yml", "-e", "-httpprof", "0.0.0.0:6060"]
         env:
-        - name: NODE_NAME 
+        - name: NODE_NAME
           valueFrom:
-            fileRef:
-              fieldPath: spce.nodeName
+            fieldRef:
+              fieldPath: spec.nodeName
         - name: ELASTICSEARCH_HOST
           value: elasticsearch
         - name: ELASTICSEARCH_PORT
-          value: "9200" 
-        securitycontext:
+          value: "9200"
+        securityContext:
           runAsUser: 0
         resources:
           limits:
@@ -82,4 +82,4 @@ spec:
         value: gpu
       - effect: NoSchedule
         key: Exists
-        
+

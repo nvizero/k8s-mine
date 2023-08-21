@@ -25,7 +25,7 @@ spec:
           limits:
             cpu: 1000m
           requests:
-            cpu: 100m
+            cpu: 1000m
         env:
           - name: ELASTICSEARCH_HOSTS
             value: http://elasticsearch:9200
@@ -63,8 +63,6 @@ spec:
   selector:
     k8s-app: kibana
 ---
----
-
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -82,4 +80,4 @@ spec:
           service:
             name: kibana
             port:
-              number: 443
+              number: 5601

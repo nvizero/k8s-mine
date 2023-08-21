@@ -9,7 +9,7 @@ metadata:
 data:
   kibana.yml: |
     server.name: kibana
-    server.name: "0" 
-    il8n.locale: zh-CN
+    server.host: "0" 
+    i18n.locale: zh-CN
     elasticsearch:
       hosts: ${ELASTICSEARCH_HOSTS}

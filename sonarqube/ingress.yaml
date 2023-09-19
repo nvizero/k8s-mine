@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sonarqube
+  namespace: sonarqube
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "20M"
+spec:
+  ingressClassName: "nginx"
+  rules:
+  - host: sonar.errorstaff.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: sonarqube
+            port:
+              number: 9000  # 将此端口更改为您的后端服务的端口
+

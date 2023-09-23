@@ -4,7 +4,7 @@ metadata:
   name: sonarqube
   namespace: sonarqube
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "20M"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50M"
 spec:
   ingressClassName: "nginx"
   rules:

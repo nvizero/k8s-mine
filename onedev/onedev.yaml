@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: onedev
+  labels:
+    app: onedev
+  namespace: onedev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: onedev
+  template:
+    metadata:
+      labels:
+        app: onedev
+    spec:
+      containers:
+      - name: onedev
+        image: 1dev/server
+        ports:
+        - containerPort: 6610
+        volumeMounts:
+        - name: onedev-volume
+          mountPath: /opt/onedev
+      volumes:
+      - name: onedev-volume
+        hostPath:
+          path: /opt/onedev
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: onedev
+  namespace: onedev
+spec:
+  selector:
+    app: onedev
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 6610
+

@@ -30,10 +30,20 @@ spec:
         volumeMounts:
         - name: mysql-volume
           mountPath: /var/lib/mysql
+        - name: mysql-config
+          mountPath: /etc/mysql/conf.d
+        - name: mysql-log-volume
+          mountPath: /var/log/mysql
       volumes:
       - name: mysql-volume
         persistentVolumeClaim:
           claimName: mysql-pv-claim
+      - name: mysql-config
+        configMap:
+          name: mysql-config
+      - name: mysql-log-volume
+        persistentVolumeClaim:
+          claimName: mysql-log-pv-claim  # 这里需要创建一个新的 PVC
 ---
 apiVersion: v1
 kind: Service

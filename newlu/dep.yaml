@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: newlu 
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: htmltpl
+  namespace: newlu
+spec:
+  selector:
+    matchLabels:
+      app: htmltpl
+  template:
+    metadata:
+      labels:
+        app: htmltpl
+    spec:
+      containers:
+      - name: htmltpl
+        image: 19840112/htmltpl:0.0.1
+        ports:
+        - containerPort: 80  # Adjust if your container listens on a different port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: htmltpl
+  namespace: newlu
+spec:
+  selector:
+    app: htmltpl
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+

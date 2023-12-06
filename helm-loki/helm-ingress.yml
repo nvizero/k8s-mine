@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana-ingress
+spec:
+  ingressClassName: "nginx"
+  rules:
+  - host: loki.errorstaff.com
+    http:
+      paths:
+      - path: /loki
+        pathType: Prefix
+        backend:
+          service:
+            name: loki  # 確保此處的服務名稱與實際的 Grafana 服務名稱相匹配
+            port:
+              number: 3100   # 確保此處的端口與實際的 Grafana 服務端口相匹配
+

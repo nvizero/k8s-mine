@@ -5,6 +5,8 @@ metadata:
   namespace: sonarqube
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "50M"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "173.249.199.139"
+
 spec:
   ingressClassName: "nginx"
   rules:

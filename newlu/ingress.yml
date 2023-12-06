@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: htmltpl 
+  namespace: newlu
+spec:
+  ingressClassName: "nginx"
+  rules:
+  - host: newlu.errorstaff.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: htmltpl 
+            port:
+              number: 80

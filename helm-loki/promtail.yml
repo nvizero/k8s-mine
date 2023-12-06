@@ -1,0 +1,122 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lokix
+spec:
+  selector:
+    matchLabels:
+      name: lokix
+  template:
+    metadata:
+      labels:
+        name: lokix
+    spec:
+      containers:
+      - name: lokix
+        image: grafana/loki:latest
+        ports:
+        - containerPort: 3100
+        volumeMounts:
+        - name: loki-storage
+          mountPath: /loki
+      volumes:
+      - name: loki-storage
+        emptyDir: {}
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: promtail-config
+data:
+  promtail.yaml: |
+    server:
+      http_listen_port: 9080
+      grpc_listen_port: 0
+    positions:
+      filename: /tmp/positions.yaml
+    clients:
+      - url: http://lokix:3100/loki/api/v1/push
+    scrape_configs:
+    - job_name: mysql-logs
+      static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: mysql
+          __path__: /var/www/mysql/*log
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: promtail
+spec:
+  selector:
+    matchLabels:
+      name: promtail
+  template:
+    metadata:
+      labels:
+        name: promtail
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - node2
+      containers:
+      - name: promtail
+        image: grafana/promtail:latest
+        args:
+          - -config.file=/etc/promtail/promtail.yaml
+        volumeMounts:
+          - name: config
+            mountPath: /etc/promtail
+          - name: log
+            mountPath: /var/www/mysql
+      volumes:
+        - name: config
+          configMap:
+            name: promtail-config
+        - name: log
+          hostPath:
+            path: /var/www/mysql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lokix-service
+spec:
+  selector:
+    name: lokix
+  ports:
+    - protocol: TCP
+      port: 3100
+      targetPort: 3100
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana-ingress
+spec:
+  ingressClassName: "nginx"
+  rules:
+  - host: lokix.errorstaff.com
+    http:
+      paths:
+      - path: /loki
+        pathType: Prefix
+        backend:
+          service:
+            name: lokix-service  # 確保此處的服務名稱與實際的 Grafana 服務名稱相匹配
+            port:
+              number: 3100   # 確保此處的端口與實際的 Grafana 服務端口相匹配
+
+

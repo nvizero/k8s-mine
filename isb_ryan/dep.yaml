@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: isb-ryan
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laravel-deployment
+  namespace: isb-ryan
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: laravel
+  template:
+    metadata:
+      labels:
+        app: laravel
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: node1
+      containers:
+      - name: laravel
+        image: 19840112/firstphp:0.0.1
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: laravel-storage
+          mountPath: /var/www
+      volumes:
+      - name: laravel-storage
+        hostPath:
+          path: /var/www/newlu
+          type: Directory
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: laravel-service
+  namespace: isb-ryan
+spec:
+  selector:
+    app: laravel
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+

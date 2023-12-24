@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: qrcode
+  namespace: qrcode
+spec:
+  ingressClassName: "nginx"
+  rules:
+  - host: qrcode.errorstaff.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: qrcode
+            port:
+              number: 80

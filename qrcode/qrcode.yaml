@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qrcode
+  labels:
+    app: qrcode
+  namespace: qrcode
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qrcode
+  template:
+    metadata:
+      labels:
+        app: qrcode
+    spec:
+      containers:
+      - name: qrcode
+        image: 19840112/qrcode:0.a.7
+        ports:
+        - containerPort: 5002 
+        env:
+        - name: FLASK_APP
+          value: "app.py" # 确保这与您的 Flask 应用入口点文件名匹配
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qrcode
+  namespace: qrcode
+spec:
+  selector:
+    app: qrcode
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 5002
+

@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: htmltpl
-        image: 19840112/htmltpl:0.0.1
+        image: 19840112/newlu:0.1
         ports:
         - containerPort: 80  # Adjust if your container listens on a different port
 ---

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: qrcode
-        image: 19840112/qrcode:0.a.7
+        image: 19840112/qrcode:0.a.9
         ports:
         - containerPort: 5002 
         env:

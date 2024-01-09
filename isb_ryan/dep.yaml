@@ -24,7 +24,7 @@ spec:
         kubernetes.io/hostname: node1
       containers:
       - name: laravel
-        image: 19840112/newlu:0.1
+        image: 19840112/newlu:0.3
         ports:
         - containerPort: 80
         volumeMounts:
@@ -33,7 +33,7 @@ spec:
       volumes:
       - name: laravel-storage
         hostPath:
-          path: /var/www/newlu
+          path: /var/www/lunew
           type: Directory
 
 ---

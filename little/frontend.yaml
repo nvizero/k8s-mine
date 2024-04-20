@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qm-web 
+  namespace: bullet 
+spec:
+  selector:
+    matchLabels:
+      app: qm-web 
+  template:
+    metadata:
+      labels:
+        app: qm-web
+    spec:
+      containers:
+      - name: qm-web 
+        image: 19840112/qm-web:v2
+        ports:
+        - containerPort: 3000  # Adjust if your container listens on a different port
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: qm-web
+  namespace: bullet
+spec:
+  selector:
+    app: qm-web 
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 3000 
+
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: qm-web 
+  namespace: bullet
+spec:
+  ingressClassName: "nginx"
+  rules:
+  - host: bullet.errorstaff.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: qm-web 
+            port:
+              number: 80

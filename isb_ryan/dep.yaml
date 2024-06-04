@@ -33,7 +33,7 @@ spec:
       volumes:
       - name: laravel-storage
         hostPath:
-          path: /var/www/lunew
+          path: /var/www/yz
           type: Directory
 
 ---

@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: microservices-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: "/$2"
+spec:
+  ingressClassName: nginx
+  rules: #這邊定義了ingress從外部導入內部的規則
+  - http:
+        paths:
+          - path: /()(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: site-nginx-service
+                port:
+                  name: http
+          - path: /mf2(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: site-nginx-service2
+                port:
+                  name: http
+

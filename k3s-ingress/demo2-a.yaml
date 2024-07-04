@@ -1,0 +1,69 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: site
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: site-nginx-frontend
+  template:
+    metadata:
+      labels:
+        app: site-nginx-frontend
+    spec:
+      containers:
+        - name: blog
+          image: 19840112/ntest1:v1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: site2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: site-nginx-frontend2
+  template:
+    metadata:
+      labels:
+        app: site-nginx-frontend2
+    spec:
+      containers:
+        - name: blog
+          image: 19840112/ntest1:v2
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: site-nginx-service
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: site-nginx-frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: site-nginx-service2
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: site-nginx-frontend2
+
